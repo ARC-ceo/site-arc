@@ -9,7 +9,7 @@ export default function Header() {
                 {/* Outro exemplo com configurações diferentes */}
                 <div className="mt-50 ml-30">
                     <RotatingWords
-                        baseText="Construindo incríveis"
+                        baseText="Construímos incríveis"
                         rotatingWords={['apps', 'softwares', 'soluções', 'sites']}
                         rotateInterval={3000}
                         animationDuration={500}
