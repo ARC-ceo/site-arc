@@ -12,23 +12,23 @@ export default function Nav() {
                 </Link>
                 <ul className="flex flex-row justify-around w-[60%] text-xl pt-5">
                     <li className="group relative mb-5">
-                        <a href="#" className="inline-block">serviços</a>
+                        <a href="/Servicos" className="inline-block">serviços</a>
                         <span className="absolute left-0 bottom-0 h-0.5 bg-current transition-all duration-500 ease-in-out w-0 group-hover:w-full"></span>
                     </li>
                     <li className="group relative mb-5">
-                        <a href="#" className="inline-block">blog</a>
+                        <a href="/" className="inline-block">blog</a>
                         <span className="absolute left-0 bottom-0 h-0.5 bg-current transition-all duration-500 ease-in-out w-0 group-hover:w-full"></span>
                     </li>
                     <li className="group relative mb-5">
-                        <a href="#" className="inline-block">sobre</a>
+                        <a href="/Sobre" className="inline-block">sobre</a>
                         <span className="absolute left-0 bottom-0 h-0.5 bg-current transition-all duration-500 ease-in-out w-0 group-hover:w-full"></span>
                     </li>
                     <li className="group relative mb-5">
-                        <a href="#" className="inline-block">projetos</a>
+                        <a href="/Projetos" className="inline-block">projetos</a>
                         <span className="absolute left-0 bottom-0 h-0.5 bg-current transition-all duration-500 ease-in-out w-0 group-hover:w-full"></span>
                     </li>
                     <li className="group relative mb-5">
-                        <a href="#" className="inline-block">contato</a>
+                        <a href="/Contato" className="inline-block">contato</a>
                         <span className="absolute left-0 bottom-0 h-0.5 bg-current transition-all duration-500 ease-in-out w-0 group-hover:w-full"></span>
                     </li>
                 </ul>
