@@ -1,9 +1,8 @@
 export default function Apresentacao() {
     return (
-        <div className="text-4xl pl-20 pr-20 pb-80">
-            <p className="mt-4">Somos uma equipe de desenvolvedores especialistas em desenvolvimento de softwares personalizados.</p>
-            <p className="mt-4">Nosso trabalho consiste em criar <span className="text-amber-400">soluções criativas</span> para atender às necessidades específicas de nossos clientes, focando em design <span className="text-amber-400">inteligente</span> e <span className="text-amber-400">funcional</span>.</p>
-            <p className="mt-4">E o nosso <span className="text-amber-400">objetivo</span> é transformar as ideias de nossos clientes em <span className="text-amber-400">realidade</span>.</p>      
+        <div className="flex flex-col text-[36px] pl-20 pr-20 pb-20 font-spaceMono mt-20">
+            <p>Criamos softwares personalizados que resolvem seus desafios. Como especialistas em <span className="border-b border-[#00C0FF]">desenvolvimento</span>, unimos <span className="border-b border-[#00C0FF]">design inteligente</span> e <span className="border-b border-[#00C0FF]">tecnologia</span> para construir as <span className="border-b border-[#00C0FF]">soluções</span> criativas que sua empresa precisa, transformando conceitos em <span className="border-b border-[#00C0FF]">realidade</span>.</p>      
+            <img src="imagensApresentacao.png" className="mt-20"/>
         </div>
     );
 }

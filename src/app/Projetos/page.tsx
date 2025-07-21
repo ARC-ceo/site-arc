@@ -28,6 +28,15 @@ const projects = [
         link: "https://conexao-anjo-vercell.vercel.app/TelaPrincipal",
         image: "/ConexaoAnjo.png",
         tags: ["Emergência", "Social", "Notificações"],
+        tech: ["React", "Next.js"]
+    },
+    {
+        name: "Estância Gourmet",
+        description:
+            "Site demonstrativo de restaurante com cardápio digital.",
+        link: "https://conexao-anjo-vercell.vercel.app/TelaPrincipal",
+        image: "/ConexaoAnjo.png",
+        tags: ["Gastronomia", "Menu", "Notificações"],
         tech: ["React", "Next.js", "Firebase"]
     },
 ];
