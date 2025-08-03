@@ -1,9 +1,6 @@
 // pages/index.tsx
 'use client'
 
-// pages/index.tsx
-'use client'
-
 import { useState } from 'react';
 
 const CreationJourneyPage = () => {
@@ -46,17 +43,17 @@ const CreationJourneyPage = () => {
     <div className="min-h-screen text-white mt-10 mb-10">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
-          <h1 className="text-[60px] mb-4">
+          <h1 className="text-[40px] mb-4">
             Nossa Jornada de Criação
           </h1>
-          <p className="text-[48px] mx-28 my-10 text-left">
+          <p className="text-[20px] mx-28 my-10 text-center justify-center">
             Cada solução começa com um problema real. No Grupo ARC, unimos estratégia, design e tecnologia para transformar ideias em produtos digitais impactantes.
           </p>
         </div>
 
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Menu Lateral */}
-          <div className="w-full lg:w-1/3">
+          <div className="pl-10 w-full lg:w-1/3">
             <div className="space-y-1">
               {stages.map((stage, index) => (
                 <div 
@@ -72,7 +69,7 @@ const CreationJourneyPage = () => {
                   <div className="absolute left-1 top-0 bottom-0 w-[0.5] z-0 h-44 bg-[#dad9d9]"></div>                 
                   
                   <h2 
-                    className={`text-[40px] mb-1 transition-colors whitespace-pre ${
+                    className={`text-[16px] mb-1 transition-colors whitespace-pre ${
                       activeStage === index ? 'text-[#00C0FF]' : 'text-gray-300'
                     }`}
                   >
@@ -82,7 +79,7 @@ const CreationJourneyPage = () => {
                   {/* Linha horizontal - apenas no item ativo */}
                   {activeStage === index && (
                     <div 
-                      className={` h-[0.3px] w-100 bg-[#00C0FF] transition-all duration-300`}
+                      className={` h-[0.3px] w-80 bg-[#00C0FF] transition-all duration-300`}
                       style={{ marginLeft: '-3rem' }}
                     ></div>
                   )}
@@ -94,13 +91,13 @@ const CreationJourneyPage = () => {
           {/* Conteúdo à Direita */}
           <div className="w-full lg:w-2/3">
             <div className="p-8">
-              <div className="mb-8 overflow-hidden">
+              <div className="mb-8 overflow-hidden w-[80%]">
                 {stages[activeStage].image}
               </div>
               
               <div className="space-y-6">
                 
-                <p className="text-[40px] text-gray-300 leading-relaxed max-w-[800px]">
+                <p className="text-[20px] text-gray-300 leading-relaxed max-w-[600px]">
                   {stages[activeStage].description}
                 </p>
               </div>

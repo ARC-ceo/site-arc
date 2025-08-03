@@ -15,7 +15,7 @@ export default function Header() {
                         rotatingWords={['Conectamos tecnologia e design \npara dar vida às suas ideias.', 'Transformamos desafios em \nsoluções digitais sob medida.', 'Inovamos com você, criando \nsoluções digitais completas.', 'Seu projeto, nossa expertise: \njuntos, criamos o extraordinário.']}
                         rotateInterval={4000}
                         animationDuration={500}
-                        textClassName="text-[50px] font-bold text-teal-400"
+                        textClassName="text-[36px] font-bold text-teal-400"
                         rotatingWordClassName="text-white whitespace-pre"
                     />
                 </div>

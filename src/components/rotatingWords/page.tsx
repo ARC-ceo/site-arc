@@ -16,7 +16,7 @@ const RotatingWords: React.FC<RotatingWordsProps> = ({
   rotatingWords,
   rotateInterval = 3000,
   animationDuration = 1000,
-  textClassName = 'text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900',
+  textClassName = 'font-bold text-gray-900',
   rotatingWordClassName = 'text-blue-600',
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
