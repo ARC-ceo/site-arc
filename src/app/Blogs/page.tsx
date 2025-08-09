@@ -1,9 +1,7 @@
-// app/page.tsx
-import Apresentacao from "../components/apresentacao/page";
-import CreationJourneyPage from "../components/criacao/page";
-import Footer from "../components/footer/page";
-import Header from "../components/header/page";
-import CarrosselBlog from "../components/carrosselBlog/page";
+// app/blog/page.tsx
+import Nav from "@/components/nav/page";
+import CarrosselBlog from "@/components/carrosselBlog/page";
+import SecaoBlog from "@/components/secaoBlog/page";
 
 function Separator() {
   return (
@@ -11,7 +9,7 @@ function Separator() {
   );
 }
 
-export default function Home() {
+export default function Blog() {
   return (
     <main className="relative overflow-x-hidden font-spaceMono">
       {/* FUNDO ÚNICO (mesmo estilo da página Serviços) */}
@@ -22,26 +20,24 @@ export default function Home() {
         <div className="absolute -bottom-32 right-0 translate-x-1/4 h-[40rem] w-[40rem] rounded-full bg-[#00005A]/30 blur-3xl" />
       </div>
 
-      <Header />
-
-      <section className="px-6 md:px-12">
-        <Apresentacao />
-      </section>
-
+      <Nav />
       <Separator />
 
-      <section className="px-6 md:px-12">
-        <CreationJourneyPage />
-      </section>
+      {/* centraliza e limita largura pra evitar “empurrões” */}
+      <div className="mx-auto w-full max-w-[1400px]">
+        <section className="px-4 sm:px-6 md:px-8 lg:px-12">
+          <CarrosselBlog />
+        </section>
+
+        <Separator />
+
+        <section className="px-4 sm:px-6 md:px-8 lg:px-12">
+          <SecaoBlog />
+        </section>
+      </div>
 
       <Separator />
-
-      <section className="px-6 md:px-12">
-        <CarrosselBlog />
-      </section>
-
-      <Separator />
-      <Footer />
+      <div className="h-10" />
     </main>
   );
 }

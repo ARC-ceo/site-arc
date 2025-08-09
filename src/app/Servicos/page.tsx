@@ -1,64 +1,221 @@
-import Footer from "@/components/footer/page";
+// app/servicos/page.tsx
 import Nav from "@/components/nav/page";
-import React from "react";
+import ServiceCard from "@/components/serviceCard/page";
 
-const services = [
-    {
-        title: "Criação de Sites",
-        description:
-            "Desenvolvemos sites institucionais, landing pages e portais personalizados com foco em performance, acessibilidade e design responsivo.",
-    },
-    {
-        title: "Desenvolvimento de Softwares Sob Medida",
-        description:
-            "Soluções digitais sob demanda, como sistemas web, painéis administrativos, automações e integrações personalizadas com APIs.",
-    },
-    {
-        title: "Dashboards e Monitoramento",
-        description:
-            "Criamos interfaces para visualização de dados em tempo real, com gráficos, indicadores e painéis interativos, como no projeto SolarMetrics.",
-    },
-    {
-        title: "Aplicações com Integração a Hardware",
-        description:
-            "Desenvolvimento de soluções integradas a dispositivos físicos e sensores, permitindo a coleta e exibição de dados de forma eficiente.",
-    },
-    {
-        title: "Design de Interfaces e Experiência do Usuário",
-        description:
-            "Projetamos interfaces centradas no usuário, acessíveis e intuitivas, para garantir a melhor experiência possível em todos os dispositivos.",
-    },
-    {
-        title: "Consultoria e Suporte Técnico",
-        description:
-            "Oferecemos consultoria técnica especializada, análise de requisitos e suporte contínuo para evolução de produtos digitais.",
-    },
-];
+export const metadata = {
+  title: "Serviços — Grupo ARC",
+};
 
-export default function ServicesPage() {
-    return (
-        <div>
-            <Nav />
-            <section className="py-16 px-4 max-w-6xl mx-auto">
-                <div className="text-center mb-12">
-                    <h2 className="text-4xl font-bold mb-4">Nossos Serviços</h2>
-                    <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                        Oferecemos soluções digitais completas, do planejamento à execução, com foco na inovação e nos resultados para o seu negócio.
-                    </p>
-                </div>
-                <div className="grid md:grid-cols-2 gap-8">
-                    {services.map((service, index) => (
-                        <div
-                            key={index}
-                            className="bg-white border border-gray-200 rounded-xl shadow-md p-6 hover:shadow-lg transition-shadow duration-300"
-                        >
-                            <h3 className="text-gray-800 text-xl font-semibold mb-2">{service.title}</h3>
-                            <p className="text-gray-600 text-sm">{service.description}</p>
-                        </div>
-                    ))}
-                </div>
-            </section>
-            <Footer />
+function Separator() {
+  return (
+    <div className="mx-10 my-6 h-px bg-gradient-to-r from-transparent via-white/25 to-transparent" />
+  );
+}
+
+export default function ServicosPage() {
+  return (
+    <main className="relative overflow-hidden">
+      {/* FUNDO ÚNICO (se estende até o fim da página) */}
+      <div className="pointer-events-none absolute inset-0 -z-10">
+        <div className="absolute inset-0 bg-gradient-to-b from-[#0C0F1A] via-[#0F1322] to-[#0C0F1A]" />
+        <div className="absolute -top-20 -left-20 h-[36rem] w-[36rem] rounded-full bg-[#00C0FF]/15 blur-3xl" />
+        <div className="absolute -bottom-32 right-[-10%] h-[40rem] w-[40rem] rounded-full bg-[#00005A]/30 blur-3xl" />
+      </div>
+
+      <Nav />
+
+      {/* HERO */}
+      <section className="relative px-10 py-16">
+        {/* barra separadora (logo abaixo do nav) */}
+
+        <div className="grid gap-8 md:grid-cols-[1.15fr,0.85fr] items-stretch">
+          <div className="relative">
+            <div
+              className="
+                relative rounded-3xl p-8
+                
+              "
+            >   
+              <h1 className="text-4xl md:text-5xl font-extrabold text-white leading-tight">
+                Transformamos tecnologia<br /> em resultado.
+              </h1>
+              <p className="mt-6 max-w-2xl text-[18px] leading-relaxed text-white/80">
+                Oferecemos soluções digitais completas, do planejamento à execução,
+                com foco na inovação e nos resultados para o seu negócio.
+              </p>
+
+              <div className="mt-10 flex flex-wrap items-center gap-4">                
+                <a
+                  href="/Contato"
+                  className="
+                    rounded-2xl border border-white/20 px-6 py-3 text-sm font-semibold text-white
+                    hover:bg-white/5 transition-colors
+                  "
+                >
+                  Fale com a gente
+                </a>
+              </div>
+            </div>
+          </div>
+
+          {/* Painel lateral decorativo */}
+          <div className="relative hidden md:block">
+            <div
+              className="
+                relative h-full rounded-3xl p-6
+                bg-white/5 backdrop-blur-xl ring-1 ring-white/10
+                text-white
+              "
+            >
+              <div className="text-sm opacity-90">
+                <p className="mb-2 font-semibold">Por que o Grupo ARC?</p>
+                <ul className="space-y-1 text-white/80">
+                  <li>• Time ágil e multidisciplinar</li>
+                  <li>• Foco em resultado e performance</li>
+                  <li>• Integrações complexas de forma simples</li>
+                  <li>• Design centrado no usuário</li>
+                </ul>
+              </div>
+              
+            </div>
+          </div>
         </div>
-    );
+      </section>
+
+      {/* SEÇÃO 1 */}
+      <Separator />
+      <section id="servicos" className="relative px-10 py-14">
+        
+        <header
+          className="
+            mb-8 rounded-3xl p-6
+            bg-white/5 backdrop-blur-xl ring-1 ring-white/10
+          "
+        >
+          <h2 className="text-2xl font-bold text-white">
+            Criação de Sites e Produtos Web
+          </h2>
+          <p className="mt-2 max-w-3xl text-white/80">
+            Desenvolvemos sites institucionais, sistemas web e landing pages que
+            combinam performance, responsividade e design centrado no usuário.
+            Cada projeto é pensado para gerar valor real, com interfaces intuitivas
+            e visual moderno.
+          </p>
+        </header>
+
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <ServiceCard
+            title="Design de Interfaces e Experiência do Usuário"
+            description="Criamos interfaces que unem estética e funcionalidade, garantindo uma navegação intuitiva e agradável."
+            ctaHref = "/UX-Design"
+          />
+          <ServiceCard
+            title="Criação e Manutenção de Sites"
+            description="Desenvolvimento e suporte contínuo para sites modernos, seguros e adaptados a diferentes dispositivos."
+          />
+          <ServiceCard
+            title="Integração com APIs"
+            description="Conectamos seu site a sistemas externos para otimizar processos e oferecer funcionalidades avançadas."
+          />
+          <ServiceCard
+            title="Criação e Reformulação de Identidade Visual"
+            description="Atualizamos ou criamos marcas com identidade visual coerente, fortalecendo a presença digital."
+          />
+        </div>
+      </section>
+
+      {/* SEÇÃO 2 */}
+      <Separator />
+      <section className="relative px-10 py-14">
+        <header
+          className="
+            mb-8 rounded-3xl p-6
+            bg-white/5 backdrop-blur-xl ring-1 ring-white/10
+          "
+        >
+          <h2 className="text-2xl font-bold text-white">
+            Integrações Tecnológicas e Soluções Customizadas
+          </h2>
+          <p className="mt-2 max-w-3xl text-white/90">
+            Criamos soluções digitais sob medida que conectam sistemas, APIs e até
+            dispositivos físicos. Seja uma automação, painel administrativo ou
+            aplicação embarcada, entregamos integração inteligente com foco em eficiência.
+          </p>
+        </header>
+
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <ServiceCard
+            title="Desenvolvimento de Softwares Sob Medida"
+            description="Aplicações personalizadas para atender às necessidades específicas da sua empresa."
+          />
+          <ServiceCard
+            title="Criação de APIs e Implementação"
+            description="Projetamos e integramos APIs para comunicação eficiente entre diferentes sistemas."
+          />
+          <ServiceCard
+            title="Suporte Técnico Especializado"
+            description="Atendimento ágil e especializado para garantir estabilidade e evolução das suas soluções."
+          />
+          <ServiceCard
+            title="Automações e Agentes de IA"
+            description="Automatizamos tarefas repetitivas e implementamos IA para ganho de produtividade."
+          />
+          <ServiceCard
+            title="Ingestão de Dados & Big Data"
+            description="Coletamos, processamos e estruturamos dados em larga escala para análises estratégicas."
+          />
+          <ServiceCard
+            title="Consultoria em TI"
+            description="Orientação especializada para otimizar recursos tecnológicos e processos internos."
+          />
+        </div>
+      </section>
+
+      {/* SEÇÃO 3 */}
+      <Separator />
+      <section className="relative px-10 py-14">
+        <header
+          className="
+            mb-8 rounded-3xl p-6
+            bg-white/5 backdrop-blur-xl ring-1 ring-white/10
+          "
+        >
+          <h2 className="text-2xl font-bold text-white">Estratégia e Planejamento</h2>
+          <p className="mt-2 max-w-3xl text-white/80">
+            Desenvolvemos estratégias digitais completas, desde a captura de clientes até
+            o fortalecimento da marca, utilizando dados e criatividade para maximizar resultados.
+          </p>
+        </header>
+
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <ServiceCard
+            title="SEO e Impulsionamento Digital"
+            description="Otimização para buscadores e campanhas patrocinadas para aumentar visibilidade."
+          />
+          <ServiceCard
+            title="Redes Sociais"
+            description="Gestão e criação de conteúdo para fortalecer o relacionamento com o público."
+          />
+          <ServiceCard
+            title="Estratégia 360º"
+            description="Planejamento completo que integra canais, mídias e ações para alcance total."
+          />
+          <ServiceCard
+            title="Captura de Leads"
+            description="Criação de funis e formulários estratégicos para gerar contatos qualificados."
+          />
+          <ServiceCard
+            title="Branding"
+            description="Posicionamento e fortalecimento da marca com ações consistentes e direcionadas."
+          />
+          <ServiceCard
+            title="Consultoria de Negócios"
+            description="Análise e direcionamento estratégico para crescimento sustentável."
+          />
+        </div>
+      </section>
+
+      <div className="h-10" />
+    </main>
+  );
 }

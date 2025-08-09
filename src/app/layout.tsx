@@ -6,14 +6,10 @@ export const metadata: Metadata = {
   description: "Especialistas em desenvolvimento de softwares personalizados.",
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="pt-br">
-      <body className="">
+    <html lang="pt-BR" className="overflow-x-hidden">
+      <body className="overflow-x-hidden bg-[#0C0F1A]">
         {children}
       </body>
     </html>

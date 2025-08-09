@@ -22,7 +22,9 @@ export default function ContactPage() {
     return (
         <div>
             <Nav />
+            
             <section className="py-16 px-4 max-w-3xl mx-auto">
+                
                 <div className="text-center mb-12">
                     <h2 className="text-4xl font-bold mb-4">Entre em Contato</h2>
                     <p className="text-lg text-gray-600 max-w-xl mx-auto">
