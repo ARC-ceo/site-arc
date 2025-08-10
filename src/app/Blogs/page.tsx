@@ -2,6 +2,7 @@
 import Nav from "@/components/nav/page";
 import CarrosselBlog from "@/components/carrosselBlog/page";
 import SecaoBlog from "@/components/secaoBlog/page";
+import Footer from "@/components/footer/page";
 
 function Separator() {
   return (
@@ -38,6 +39,7 @@ export default function Blog() {
 
       <Separator />
       <div className="h-10" />
+      <Footer />
     </main>
   );
 }

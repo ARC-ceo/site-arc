@@ -1,4 +1,5 @@
 // app/servicos/page.tsx
+import Footer from "@/components/footer/page";
 import Nav from "@/components/nav/page";
 import ServiceCard from "@/components/serviceCard/page";
 
@@ -107,19 +108,22 @@ export default function ServicosPage() {
           <ServiceCard
             title="Design de Interfaces e Experiência do Usuário"
             description="Criamos interfaces que unem estética e funcionalidade, garantindo uma navegação intuitiva e agradável."
-            ctaHref = "/UX-Design"
+            ctaHref = "/ux-design"
           />
           <ServiceCard
             title="Criação e Manutenção de Sites"
             description="Desenvolvimento e suporte contínuo para sites modernos, seguros e adaptados a diferentes dispositivos."
+            ctaHref = "/criacao-de-sites"
           />
           <ServiceCard
             title="Integração com APIs"
             description="Conectamos seu site a sistemas externos para otimizar processos e oferecer funcionalidades avançadas."
+            ctaHref = "/integracao-com-apis"
           />
           <ServiceCard
             title="Criação e Reformulação de Identidade Visual"
             description="Atualizamos ou criamos marcas com identidade visual coerente, fortalecendo a presença digital."
+            ctaHref = "/criacao-e-reformulacao-de-identidade-visual"
           />
         </div>
       </section>
@@ -147,26 +151,32 @@ export default function ServicosPage() {
           <ServiceCard
             title="Desenvolvimento de Softwares Sob Medida"
             description="Aplicações personalizadas para atender às necessidades específicas da sua empresa."
+            ctaHref = "/desenvolvimento-sob-medida"
           />
           <ServiceCard
             title="Criação de APIs e Implementação"
             description="Projetamos e integramos APIs para comunicação eficiente entre diferentes sistemas."
+            ctaHref = "/criacao-de-apis-e-implementacao"
           />
           <ServiceCard
             title="Suporte Técnico Especializado"
             description="Atendimento ágil e especializado para garantir estabilidade e evolução das suas soluções."
+            ctaHref = "/suporte-tecnico-especializado"
           />
           <ServiceCard
             title="Automações e Agentes de IA"
             description="Automatizamos tarefas repetitivas e implementamos IA para ganho de produtividade."
+            ctaHref = "/automacoes-e-agentes-de-ia"
           />
           <ServiceCard
             title="Ingestão de Dados & Big Data"
             description="Coletamos, processamos e estruturamos dados em larga escala para análises estratégicas."
+            ctaHref = "/ingestao-de-dados"
           />
           <ServiceCard
             title="Consultoria em TI"
             description="Orientação especializada para otimizar recursos tecnológicos e processos internos."
+            ctaHref = "/consultoria-em-ti"
           />
         </div>
       </section>
@@ -191,31 +201,38 @@ export default function ServicosPage() {
           <ServiceCard
             title="SEO e Impulsionamento Digital"
             description="Otimização para buscadores e campanhas patrocinadas para aumentar visibilidade."
+            ctaHref = "/seo-e-impulsionamento"
           />
           <ServiceCard
             title="Redes Sociais"
             description="Gestão e criação de conteúdo para fortalecer o relacionamento com o público."
+            ctaHref = "/redes-sociais"
           />
           <ServiceCard
             title="Estratégia 360º"
             description="Planejamento completo que integra canais, mídias e ações para alcance total."
+            ctaHref = "/estrategia-360"
           />
           <ServiceCard
             title="Captura de Leads"
             description="Criação de funis e formulários estratégicos para gerar contatos qualificados."
+            ctaHref = "/captura-de-leads"
           />
           <ServiceCard
             title="Branding"
             description="Posicionamento e fortalecimento da marca com ações consistentes e direcionadas."
+            ctaHref = "/branding"
           />
           <ServiceCard
             title="Consultoria de Negócios"
             description="Análise e direcionamento estratégico para crescimento sustentável."
+            ctaHref = "/consultoria-de-negocios"
           />
         </div>
       </section>
 
       <div className="h-10" />
+      <Footer />
     </main>
   );
 }

@@ -2,6 +2,7 @@
 
 import React, { ReactNode, useState } from 'react';
 import Nav from '../nav/page';
+import Footer from '../footer/page';
 
 type Props = {
   // Hero (texto à esquerda + formulário à direita)
@@ -270,6 +271,7 @@ export default function LandingProduto(props: Props) {
           </button>
         </div>
       </section>
+      <Footer />
     </div>
   );
 }

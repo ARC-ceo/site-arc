@@ -18,12 +18,7 @@ export default function CarrosselBlog() {
     const viewport = viewportRef.current;
     if (!viewport) return;
 
-    // 1º slide sem erro de tipo (use 'auto' em vez de 'instant')
-    slidesRef.current[0]?.scrollIntoView({
-      behavior: 'auto',
-      inline: 'start',
-      block: 'nearest',
-    });
+    viewport.scrollLeft = 0;
     setActive(0);
 
     const ios: IntersectionObserver[] = [];
@@ -42,11 +37,13 @@ export default function CarrosselBlog() {
   }, []);
 
   const scrollToIndex = (idx: number) => {
-    slidesRef.current[idx]?.scrollIntoView({
-      behavior: 'smooth',
-      inline: 'center',
-      block: 'nearest',
-    });
+    const viewport = viewportRef.current;
+    const target = slidesRef.current[idx];
+    if (!viewport || !target) return;
+    // Centraliza o card no eixo X sem mexer no scroll vertical da página
+    const left =
+      target.offsetLeft - (viewport.clientWidth - target.clientWidth) / 2;
+    viewport.scrollTo({ left, behavior: 'smooth' });
   };
 
   const intensityFor = (idx: number) => {

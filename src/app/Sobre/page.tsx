@@ -98,11 +98,11 @@ export default function AboutPage() {
                 <div className="mx-auto max-w-[1440px]">
                     <div className="flex flex-col lg:flex-row items-start justify-between gap-x-10 gap-y-10">
                         {/* SVG grande */}
-                        <div className="hidden lg:block lg:basis-[48%] w-full">
+                        <div className="relative hidden lg:block lg:basis-[80%] xl:basis-[100%] 2xl:basis-[100%] w-full">
                             <svg
                                 viewBox="0 0 1216 1505"
                                 xmlns="http://www.w3.org/2000/svg"
-                                className="w-full h-auto max-w-[min(100%,720px)] mx-auto"
+                                className="w-full h-auto max-w-[clamp(720px,60vw,1200px)] mx-auto"
                                 preserveAspectRatio="xMidYMid meet"
                             >
                                 {/* (SVG original) */}
