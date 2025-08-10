@@ -1,7 +1,7 @@
 'use client'
 
 import Footer from "@/components/footer/page";
-import Header from "@/components/header/page";
+import HeaderSobre from "@/components/headerSobre/page";
 import React, { useState } from "react";
 
 const etapas = [
@@ -91,7 +91,7 @@ export default function AboutPage() {
                 <div className="absolute bottom-0 left-1/3 h-80 w-80 rounded-full bg-sky-400/10 blur-[100px]" />
             </div>
 
-            <Header />
+            <HeaderSobre />
 
             {/* BLOCO 1 – Trajetória + texto */}
             <section className="px-4 md:px-6 lg:px-8">

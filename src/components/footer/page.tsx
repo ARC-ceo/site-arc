@@ -53,7 +53,6 @@ export default function Footer() {
                         <div>
                             <h4 className="text-sm font-semibold text-[#00C0FF]">Recursos</h4>
                             <ul className="mt-4 space-y-3 text-sm text-white/80">
-                                <li><Link href="/faq" className="hover:text-[#00C0FF]">F.A.Q.</Link></li>
                                 <li><Link href="/termos" className="hover:text-[#00C0FF]">Termos de Uso</Link></li>
                                 <li><Link href="/Blogs" className="hover:text-[#00C0FF]">Blog</Link></li>
                             </ul>
