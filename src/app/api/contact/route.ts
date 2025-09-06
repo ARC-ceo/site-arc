@@ -42,8 +42,8 @@ export async function POST(req: Request) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        from: "Grupo ARC <noreply@grouparc.com.br>",
-        to: ["contato@grouparc.com.br"],
+        from: "Grupo ARC <onboarding@resend.dev>",
+        to: ["rciteli@gmail.com"],
         subject: `Novo contato – ${name}`,
         reply_to: email,
         text: `Nome: ${name}\nEmail: ${email}\nIP: ${ip}\n\nMensagem:\n${message}`,
