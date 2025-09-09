@@ -243,8 +243,8 @@ function InfoCard() {
         />
         <InfoRow
           label="LinkedIn"
-          value="/company/grupo-arc"
-          href="https://www.linkedin.com/company/grupo-arc"
+          value="/company/arc-grupo"
+          href="https://www.linkedin.com/company/arc-grupo"
         />
         <InfoRow label="Portfólio" value="site-arc.vercel.app" href="https://site-arc.vercel.app" />
       </div>
