@@ -4,6 +4,28 @@ import Footer from "@/components/footer/page";
 import Nav from "@/components/nav/page";
 import React, { useEffect, useRef, useState } from "react";
 
+/** Tipos mínimos da API do Turnstile para evitar `any` */
+type TurnstileWidgetId = string;
+type TurnstileTheme = "auto" | "light" | "dark";
+interface TurnstileRenderOptions {
+  sitekey: string;
+  theme?: TurnstileTheme;
+  callback?: (token: string) => void;
+  "error-callback"?: () => void;
+  "expired-callback"?: () => void;
+}
+interface TurnstileAPI {
+  render(container: HTMLElement, options: TurnstileRenderOptions): TurnstileWidgetId;
+  reset(id?: TurnstileWidgetId): void;
+  remove(id: TurnstileWidgetId): void;
+}
+declare global {
+  interface Window {
+    turnstile?: TurnstileAPI;
+    onTurnstileLoad?: () => void;
+  }
+}
+
 export default function ContactPage() {
   const [form, setForm] = useState({ name: "", email: "", message: "", honeypot: "" });
   const [loading, setLoading] = useState(false);
@@ -33,13 +55,13 @@ export default function ContactPage() {
           turnstileToken,
         }),
       });
-      const data = await res.json();
+      const data: { ok: boolean } = await res.json();
       if (data.ok) {
         setSubmitted("ok");
         setForm({ name: "", email: "", message: "", honeypot: "" });
-        // reset Turnstile
-        // @ts-expect-error global externo
         if (window.turnstile?.reset) window.turnstile.reset();
+        setTurnstileToken("");
+        startedAtRef.current = Date.now();
       } else {
         setSubmitted("err");
       }
@@ -129,6 +151,11 @@ export default function ContactPage() {
               {/* Turnstile */}
               <div className="mt-5">
                 <Turnstile onToken={setTurnstileToken} />
+                {!turnstileToken && (
+                  <p className="mt-2 text-xs text-white/60">
+                    Complete a verificação acima para habilitar o envio.
+                  </p>
+                )}
               </div>
 
               <div className="mt-6 flex items-center justify-between gap-4">
@@ -259,20 +286,17 @@ function BackgroundAura() {
   );
 }
 
-/** Turnstile robusto: render via API, com fallback se o script já carregou */
+/** Turnstile robusto: render via API, sem `any` */
 function Turnstile({ onToken }: { onToken: (t: string) => void }) {
   const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY as string | undefined;
-  const containerRef = React.useRef<HTMLDivElement | null>(null);
-  const widgetIdRef = React.useRef<any>(null);
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const widgetIdRef = useRef<TurnstileWidgetId | null>(null);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!siteKey) return;
 
-    // callback onload deve existir ANTES do script carregar
-    (window as any).onTurnstileLoad = () => {
-      // se já renderizou, não renderize de novo
-      if (widgetIdRef.current || !containerRef.current) return;
-      // @ts-expect-error turnstile global
+    window.onTurnstileLoad = () => {
+      if (widgetIdRef.current || !containerRef.current || !window.turnstile) return;
       widgetIdRef.current = window.turnstile.render(containerRef.current, {
         sitekey: siteKey,
         theme: "auto",
@@ -292,32 +316,24 @@ function Turnstile({ onToken }: { onToken: (t: string) => void }) {
       s.async = true;
       s.defer = true;
       document.head.appendChild(s);
-    } else {
-      // se o script já foi injetado/rodado, tente render imediatamente
-      // @ts-expect-error turnstile global
-      if (window.turnstile && containerRef.current && !widgetIdRef.current) {
-        // @ts-expect-error turnstile global
-        widgetIdRef.current = window.turnstile.render(containerRef.current, {
-          sitekey: siteKey,
-          theme: "auto",
-          callback: (token: string) => onToken(token),
-          "error-callback": () => onToken(""),
-          "expired-callback": () => onToken(""),
-        });
-      } else {
-        // como fallback, aguarde a função onload (caso o script ainda esteja inicializando)
-        // nada a fazer aqui — onTurnstileLoad cuidará
-      }
+    } else if (window.turnstile && containerRef.current && !widgetIdRef.current) {
+      // script já carregado (hot reload)
+      widgetIdRef.current = window.turnstile.render(containerRef.current, {
+        sitekey: siteKey,
+        theme: "auto",
+        callback: (token: string) => onToken(token),
+        "error-callback": () => onToken(""),
+        "expired-callback": () => onToken(""),
+      });
     }
 
     return () => {
-      // desmonta widget ao sair
-      // @ts-expect-error turnstile global
       if (window.turnstile && widgetIdRef.current) {
         try {
-          // @ts-expect-error turnstile global
           window.turnstile.remove(widgetIdRef.current);
-        } catch {}
+        } catch {
+          // ignore
+        }
         widgetIdRef.current = null;
       }
     };
