@@ -2,6 +2,7 @@
 
 import Footer from "@/components/footer/page";
 import HeaderSobre from "@/components/headerSobre/page";
+import Link from "next/link";
 import React, { useState } from "react";
 
 const etapas = [
@@ -246,9 +247,9 @@ export default function AboutPage() {
                   shadow-[15px_19px_4px_0px_#0A0A0A]
                   hover:bg-cyan-400 transition
                 "
-                            >
+                            ><Link href="/Contato">
                                 Tirar do papel
-                            </button>
+                            </Link></button>
                         </div>
 
                         {/* Imagem */}

@@ -200,9 +200,9 @@ export default function ProjetoSolarMetricsPage() {
               <p className="text-[32px] font-semibold leading-relaxed text-white">
                 Pronto para alcançar <br /> resultados como esses <br /> com a sua ideia?
               </p>
-              <button className="mt-2 rounded-full bg-[#00C0FF] px-6 py-2 text-[20px] text-white shadow-[0_10px_30px_-10px_rgba(0,0,0,0.6)] hover:brightness-110">
+              <button className="mt-2 rounded-full bg-[#00C0FF] px-6 py-2 text-[20px] text-white shadow-[0_10px_30px_-10px_rgba(0,0,0,0.6)] hover:brightness-110"><Link href="/Contato">
                 Iniciar parceria
-              </button>
+              </Link></button>
             </div>
             <div className="flex w-full justify-end">
               <div className="max-w-[500px]">
