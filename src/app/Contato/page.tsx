@@ -264,10 +264,10 @@ function InfoCard() {
         />
         <InfoRow
           label="LinkedIn"
-          value="/company/arc-grupo"
-          href="https://www.linkedin.com/company/arc-grupo"
+          value="/company/grupo-arc"
+          href="https://www.linkedin.com/company/grupo-arc"
         />
-        <InfoRow label="Portfólio" value="site-arc.vercel.app" href="https://site.grouparc.com.br" />
+        <InfoRow label="Portfólio" value="site.grouparc.com.br" href="https://site.grouparc.com.br" />
       </div>
       <div className="mt-6 rounded-xl bg-gradient-to-br from-[#00C0FF]/20 to-transparent p-[1px]">
         <div className="rounded-xl bg-[#0C0F1A] p-4">
