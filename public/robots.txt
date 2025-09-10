@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://site.grouparc.com.br
+
+# Sitemaps
+Sitemap: https://site.grouparc.com.br/sitemap.xml
