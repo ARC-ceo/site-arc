@@ -7,7 +7,11 @@ const BYPASS_TURNSTILE = process.env.BYPASS_TURNSTILE === "1";
 export async function POST(req: Request) {
   try {
     const ip = getIp(req);
-    const { name, email, message, phone = "", honeypot = "", startedAt, turnstileToken, origin = "" } = await req.json();
+    const { name, email, message, phone = "", honeypot = "", startedAt, turnstileToken, origin = "", agree } = await req.json();
+
+    if (agree !== true) {
+      return jerr("É necessário concordar com os Termos & Privacidade.", 400);
+    }
 
     // 1) Campos
     if (!name || !email || !message) return jerr("Campos obrigatórios ausentes.", 400);

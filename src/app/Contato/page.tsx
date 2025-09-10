@@ -29,6 +29,7 @@ declare global {
 export default function ContactPage() {
   const [form, setForm] = useState({ name: "", email: "", message: "", honeypot: "" });
   const [loading, setLoading] = useState(false);
+  const [agree, setAgree] = useState(false);
   const [submitted, setSubmitted] = useState<null | "ok" | "err">(null);
   const [turnstileToken, setTurnstileToken] = useState("");
   const startedAtRef = useRef<number>(Date.now());
@@ -53,6 +54,7 @@ export default function ContactPage() {
           honeypot: form.honeypot,
           startedAt: startedAtRef.current,
           turnstileToken,
+          agree,
         }),
       });
       const data: { ok: boolean } = await res.json();
@@ -160,19 +162,38 @@ export default function ContactPage() {
 
               <div className="mt-6 flex items-center justify-between gap-4">
                 {submitted === "ok" && (
-                  <p className="text-sm text-emerald-400">
-                    Mensagem enviada! Em breve entraremos em contato.
-                  </p>
+                  <div className="mt-3 rounded-2xl border border-emerald-400/30 bg-emerald-500/10 p-4">
+                    <p className="text-sm text-emerald-300">
+                      Mensagem enviada! Em breve entraremos em contato. ✅
+                    </p>
+                  </div>
                 )}
+
                 {submitted === "err" && (
                   <p className="text-sm text-rose-400">
                     Não foi possível enviar agora. Tente novamente em instantes.
                   </p>
                 )}
-
+                <div className="mt-4 flex items-start gap-3">
+                  <input
+                    id="agree"
+                    type="checkbox"
+                    checked={agree}
+                    onChange={(e) => setAgree(e.target.checked)}
+                    className="mt-1 h-4 w-4 rounded border-white/30 bg-black/20"
+                    required
+                  />
+                  <label htmlFor="agree" className="text-sm text-white/80">
+                    Li e concordo com os{" "}
+                    <a href="/termos" target="_blank" className="underline text-[#00C0FF]">
+                      Termos & Privacidade
+                    </a>
+                    .
+                  </label>
+                </div>
                 <button
                   type="submit"
-                  disabled={loading || !turnstileToken}
+                  disabled={loading || !turnstileToken || !agree}
                   className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#00C0FF] px-5 py-3 font-medium text-black transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-70"
                 >
                   {loading ? (

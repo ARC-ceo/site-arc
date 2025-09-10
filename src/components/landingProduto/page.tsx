@@ -63,6 +63,39 @@ type Props = {
   onFormSubmit?: (data: { nome: string; email: string; telefone: string; mensagem: string }) => Promise<void> | void;
 };
 
+function SuccessConfirm({
+  onClose,
+  origin = "/LP",
+}: {
+  onClose: () => void;
+  origin?: string;
+}) {
+  return (
+    <div className="mt-3 rounded-2xl border border-emerald-400/30 bg-emerald-500/10 p-4">
+      <p className="text-sm text-emerald-300">
+        Recebido! Em breve entraremos em contato. ✅
+      </p>
+      <div className="mt-3 flex flex-wrap gap-3">
+        <a
+          href="/termos"
+          className="inline-flex items-center justify-center rounded-full bg-white/90 px-4 py-2 text-sm font-medium text-black hover:bg-white transition"
+        >
+          Ver Termos & Privacidade
+        </a>
+        <button
+          onClick={onClose}
+          className="inline-flex items-center justify-center rounded-full border border-white/20 px-4 py-2 text-sm text-white hover:bg-white/10 transition"
+        >
+          Li
+        </button>
+        <span className="text-xs text-white/50 self-center">
+          Origem: {origin}
+        </span>
+      </div>
+    </div>
+  );
+}
+
 export default function LandingProduto(props: Props) {
   const {
     titulo, subtitulo, descricao, bgHeader,
@@ -85,6 +118,8 @@ export default function LandingProduto(props: Props) {
   const [ok, setOk] = useState(false);
   const [turnstileToken, setTurnstileToken] = useState("");
   const startedAtRef = useRef<number>(Date.now());
+  const [agree, setAgree] = useState(false);
+
 
   const bgSrc = typeof bgHeader === "string" ? (bgHeader.startsWith("/") ? bgHeader : `/${bgHeader}`) : bgHeader?.src;
 
@@ -108,6 +143,7 @@ export default function LandingProduto(props: Props) {
             startedAt: startedAtRef.current,
             turnstileToken,
             origin: typeof window !== "undefined" ? window.location.pathname : "/LP",
+            agree,
           }),
         });
         const data: { ok: boolean } = await res.json();
@@ -123,7 +159,6 @@ export default function LandingProduto(props: Props) {
       alert("Não foi possível enviar agora. Tente novamente em instantes.");
     } finally {
       setSending(false);
-      setTimeout(() => setOk(false), 4000);
     }
   }
 
@@ -228,15 +263,37 @@ export default function LandingProduto(props: Props) {
                     )}
                   </div>
 
+                  <div className="mt-2 flex items-start gap-3">
+                    <input
+                      id="agree-lp"
+                      type="checkbox"
+                      checked={agree}
+                      onChange={(e) => setAgree(e.target.checked)}
+                      className="mt-1 h-4 w-4 rounded border-white/30 bg-white/10"
+                      required
+                    />
+                    <label htmlFor="agree-lp" className="text-sm text-white/80">
+                      Li e concordo com os{" "}
+                      <a href="/termos" target="_blank" className="underline text-[#00C0FF]">
+                        Termos & Privacidade
+                      </a>
+                      .
+                    </label>
+                  </div>
+
                   <button
                     type="submit"
-                    disabled={sending || !turnstileToken}
+                    disabled={sending || !turnstileToken || !agree}
                     className="mt-2 inline-flex items-center justify-center rounded-full bg-[#00C0FF] px-6 py-3 text-base font-semibold text-black hover:bg-[#00a7de] transition disabled:opacity-60"
                   >
                     {sending ? "Enviando…" : ctaForm}
                   </button>
 
-                  {ok && <p className="text-sm text-emerald-300">Recebido! Em breve entraremos em contato. ✅</p>}
+                  {ok && (
+                    <p className="mt-3 text-sm text-emerald-300">
+                      Mensagem recebida! Em breve entraremos em contato. ✅
+                    </p>
+                  )}
                 </div>
               </form>
             </div>
