@@ -7,12 +7,10 @@ const BYPASS_TURNSTILE = process.env.BYPASS_TURNSTILE === "1";
 export async function POST(req: Request) {
   try {
     const ip = getIp(req);
-    const { name, email, message, honeypot = "", startedAt, turnstileToken } = await req.json();
+    const { name, email, message, phone = "", honeypot = "", startedAt, turnstileToken, origin = "" } = await req.json();
 
     // 1) Campos
-    if (!name || !email || !message) {
-      return jerr("Campos obrigatórios ausentes.", 400);
-    }
+    if (!name || !email || !message) return jerr("Campos obrigatórios ausentes.", 400);
     if (typeof name !== "string" || typeof email !== "string" || typeof message !== "string") {
       return jerr("Formato inválido.", 400);
     }
@@ -43,12 +41,10 @@ export async function POST(req: Request) {
         }),
       });
       const verifyJson: { success?: boolean } = await verifyResp.json();
-      if (!verifyJson.success) {
-        return jerr("Falha no desafio anti-spam (Turnstile).", 400);
-      }
+      if (!verifyJson.success) return jerr("Falha no desafio anti-spam (Turnstile).", 400);
     }
 
-    // 5) Resend (envio)
+    // 5) Resend (envio de email)
     const apiKey = process.env.RESEND_API_KEY;
     if (!apiKey) return jerr("RESEND_API_KEY ausente.", 500);
 
@@ -64,8 +60,10 @@ export async function POST(req: Request) {
       html: `
         <div style="font-family:Arial,Helvetica,sans-serif;padding:16px;background:#0C0F1A;color:#fff">
           <h2 style="margin:0 0 12px;color:#fff">Novo contato pelo site</h2>
+          <p><strong>Origem:</strong> ${escapeHtml(origin || "/Contato")}</p>
           <p><strong>Nome:</strong> ${escapeHtml(name)}</p>
           <p><strong>Email:</strong> ${escapeHtml(email)}</p>
+          <p><strong>Telefone:</strong> ${escapeHtml(phone)}</p>
           <p><strong>IP:</strong> ${escapeHtml(ip || "-")}</p>
           <p><strong>Mensagem:</strong></p>
           <div style="white-space:pre-wrap;line-height:1.6;color:#E6F7FF">${escapeHtml(message)}</div>
@@ -73,9 +71,7 @@ export async function POST(req: Request) {
       `,
     });
 
-    if (error) {
-      return jerr(`Falha ao enviar email (Resend): ${error.message}`, 500);
-    }
+    if (error) return jerr(`Falha ao enviar email (Resend): ${error.message}`, 500);
 
     // 6) Planilha (best-effort)
     const webhook = process.env.SHEETS_WEBHOOK_URL;
@@ -86,13 +82,15 @@ export async function POST(req: Request) {
         body: JSON.stringify({
           name,
           email,
+          phone,
           message,
           ip,
+          origin,
           timestamp: new Date().toISOString(),
           transport: "resend",
         }),
-      }).catch((e) => {
-        if (DEBUG) console.error("Sheets webhook error:", e);
+      }).catch((err) => {
+        if (DEBUG) console.error("Sheets webhook error:", err);
       });
     }
 

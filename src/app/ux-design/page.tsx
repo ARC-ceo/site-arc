@@ -28,7 +28,7 @@ export default function MinhaLanding() {
             pergunta3="Qual o prazo típico?"
             resposta3="Varia conforme o escopo, mas landing pages costumam levar de 1 a 3 semanas."
             cta="Falar com a ARC"
-            ctaForm="Quero um design de alto impacto" 
+            ctaForm="Quero um design de alto impacto"
             onCtaClick={() => window.open('https://seulink.com/contato', '_blank')}
         />
     );

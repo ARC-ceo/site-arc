@@ -1,8 +1,30 @@
-'use client';
+"use client";
 
-import React, { ReactNode, useState } from 'react';
-import Nav from '../nav/page';
-import Footer from '../footer/page';
+import React, { ReactNode, useEffect, useRef, useState } from "react";
+import Nav from "../nav/page";
+import Footer from "../footer/page";
+
+/** Tipos mínimos Turnstile (sem any) */
+type TurnstileWidgetId = string;
+type TurnstileTheme = "auto" | "light" | "dark";
+interface TurnstileRenderOptions {
+  sitekey: string;
+  theme?: TurnstileTheme;
+  callback?: (token: string) => void;
+  "error-callback"?: () => void;
+  "expired-callback"?: () => void;
+}
+interface TurnstileAPI {
+  render(container: HTMLElement, options: TurnstileRenderOptions): TurnstileWidgetId;
+  reset(id?: TurnstileWidgetId): void;
+  remove(id: TurnstileWidgetId): void;
+}
+declare global {
+  interface Window {
+    turnstile?: TurnstileAPI;
+    onTurnstileLoad?: () => void;
+  }
+}
 
 type Props = {
   // Hero (texto à esquerda + formulário à direita)
@@ -37,35 +59,18 @@ type Props = {
   onCtaClick?: () => void;
 
   // Formulário
-  ctaForm: string; // <-- Novo campo para personalizar botão
+  ctaForm: string;
   onFormSubmit?: (data: { nome: string; email: string; telefone: string; mensagem: string }) => Promise<void> | void;
 };
 
 export default function LandingProduto(props: Props) {
   const {
-    titulo,
-    subtitulo,
-    descricao,
-    bgHeader,
-    iconeb1,
-    beneficio1,
-    descricaobeneficio1,
-    iconeb2,
-    beneficio2,
-    descricaobeneficio2,
-    iconeb3,
-    beneficio3,
-    descricaobeneficio3,
-    pergunta1,
-    resposta1,
-    pergunta2,
-    resposta2,
-    pergunta3,
-    resposta3,
-    cta,
-    onCtaClick,
-    ctaForm,
-    onFormSubmit,
+    titulo, subtitulo, descricao, bgHeader,
+    iconeb1, beneficio1, descricaobeneficio1,
+    iconeb2, beneficio2, descricaobeneficio2,
+    iconeb3, beneficio3, descricaobeneficio3,
+    pergunta1, resposta1, pergunta2, resposta2, pergunta3, resposta3,
+    cta, onCtaClick, ctaForm, onFormSubmit,
   } = props;
 
   const faqs = [
@@ -75,26 +80,47 @@ export default function LandingProduto(props: Props) {
   ];
 
   const [open, setOpen] = useState<number | null>(0);
-  const [form, setForm] = useState({ nome: '', email: '', telefone: '', mensagem: '' });
+  const [form, setForm] = useState({ nome: "", email: "", telefone: "", mensagem: "", honeypot: "" });
   const [sending, setSending] = useState(false);
   const [ok, setOk] = useState(false);
+  const [turnstileToken, setTurnstileToken] = useState("");
+  const startedAtRef = useRef<number>(Date.now());
 
-  const bgSrc =
-    typeof bgHeader === 'string'
-      ? (bgHeader.startsWith('/') ? bgHeader : `/${bgHeader}`)
-      : bgHeader?.src;
+  const bgSrc = typeof bgHeader === "string" ? (bgHeader.startsWith("/") ? bgHeader : `/${bgHeader}`) : bgHeader?.src;
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setSending(true);
     try {
       if (onFormSubmit) {
-        await onFormSubmit(form);
+        await onFormSubmit({ nome: form.nome, email: form.email, telefone: form.telefone, mensagem: form.mensagem });
       } else {
-        console.log('Form landing:', form);
+        // Envia para a mesma rota /api/contact utilizada no Contato
+        const res = await fetch("/api/contact", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name: form.nome,
+            email: form.email,
+            message: form.mensagem,
+            phone: form.telefone,
+            honeypot: form.honeypot,
+            startedAt: startedAtRef.current,
+            turnstileToken,
+            origin: typeof window !== "undefined" ? window.location.pathname : "/LP",
+          }),
+        });
+        const data: { ok: boolean } = await res.json();
+        if (!data.ok) throw new Error("Falha no envio");
       }
       setOk(true);
-      setForm({ nome: '', email: '', telefone: '', mensagem: '' });
+      setForm({ nome: "", email: "", telefone: "", mensagem: "", honeypot: "" });
+      if (window.turnstile?.reset) window.turnstile.reset();
+      setTurnstileToken("");
+      startedAtRef.current = Date.now();
+    } catch {
+      setOk(false);
+      alert("Não foi possível enviar agora. Tente novamente em instantes.");
     } finally {
       setSending(false);
       setTimeout(() => setOk(false), 4000);
@@ -105,12 +131,12 @@ export default function LandingProduto(props: Props) {
     <div className="w-full text-white">
       {/* HERO */}
       <section
-        className="relative isolate overflow-hidden min-h-[560px]" // garante altura mínima
+        className="relative isolate overflow-hidden min-h-[560px]"
         style={{
           backgroundImage: bgSrc ? `url(${bgSrc})` : undefined,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
         }}
       >
         <Nav />
@@ -136,6 +162,17 @@ export default function LandingProduto(props: Props) {
               >
                 <h2 className="text-xl md:text-2xl font-bold">Fale com a ARC</h2>
                 <p className="mt-1 text-white/80 text-sm">Conte rapidamente sobre seu projeto.</p>
+
+                {/* Honeypot invisível */}
+                <input
+                  type="text"
+                  name="honeypot"
+                  value={form.honeypot}
+                  onChange={(e) => setForm((f) => ({ ...f, honeypot: e.target.value }))}
+                  className="hidden"
+                  tabIndex={-1}
+                  autoComplete="off"
+                />
 
                 <div className="mt-5 grid grid-cols-1 gap-4">
                   <label className="block">
@@ -183,19 +220,23 @@ export default function LandingProduto(props: Props) {
                     />
                   </label>
 
+                  {/* Turnstile */}
+                  <div className="mt-1">
+                    <Turnstile onToken={setTurnstileToken} />
+                    {!turnstileToken && (
+                      <p className="mt-2 text-xs text-white/60">Complete a verificação acima para habilitar o envio.</p>
+                    )}
+                  </div>
+
                   <button
                     type="submit"
-                    disabled={sending}
+                    disabled={sending || !turnstileToken}
                     className="mt-2 inline-flex items-center justify-center rounded-full bg-[#00C0FF] px-6 py-3 text-base font-semibold text-black hover:bg-[#00a7de] transition disabled:opacity-60"
                   >
-                    {sending ? 'Enviando…' : ctaForm}
+                    {sending ? "Enviando…" : ctaForm}
                   </button>
 
-                  {ok && (
-                    <p className="text-sm text-emerald-300">
-                      Recebido! Em breve entraremos em contato. ✅
-                    </p>
-                  )}
+                  {ok && <p className="text-sm text-emerald-300">Recebido! Em breve entraremos em contato. ✅</p>}
                 </div>
               </form>
             </div>
@@ -211,10 +252,7 @@ export default function LandingProduto(props: Props) {
             { icon: iconeb2, title: beneficio2, desc: descricaobeneficio2 },
             { icon: iconeb3, title: beneficio3, desc: descricaobeneficio3 },
           ].map((b, i) => (
-            <div
-              key={i}
-              className="rounded-3xl bg-white/8 backdrop-blur-xl ring-1 ring-white/12 p-6 md:p-7 shadow-[0_8px_30px_rgba(0,0,0,0.25)]"
-            >
+            <div key={i} className="rounded-3xl bg-white/8 backdrop-blur-xl ring-1 ring-white/12 p-6 md:p-7 shadow-[0_8px_30px_rgba(0,0,0,0.25)]">
               <div className="mb-4 h-12 w-12 flex items-center justify-center">{b.icon}</div>
               <h3 className="text-xl font-semibold text-[#00C0FF]">{b.title}</h3>
               <p className="mt-2 text-white/85">{b.desc}</p>
@@ -230,24 +268,14 @@ export default function LandingProduto(props: Props) {
           {faqs.map((item, idx) => {
             const isOpen = open === idx;
             return (
-              <div
-                key={idx}
-                className="rounded-2xl bg-white/7 backdrop-blur-xl ring-1 ring-white/12 shadow-[0_6px_24px_rgba(0,0,0,0.25)]"
-              >
-                <button
-                  className="w-full text-left px-5 py-4 flex items-center justify-between"
-                  onClick={() => setOpen(isOpen ? null : idx)}
-                >
+              <div key={idx} className="rounded-2xl bg-white/7 backdrop-blur-xl ring-1 ring-white/12 shadow-[0_6px_24px_rgba(0,0,0,0.25)]">
+                <button className="w-full text-left px-5 py-4 flex items-center justify-between" onClick={() => setOpen(isOpen ? null : idx)}>
                   <span className="text-lg md:text-xl font-medium">{item.q}</span>
-                  <span
-                    className={`ml-4 inline-flex h-7 w-7 items-center justify-center rounded-full ring-1 ring-white/20 ${isOpen ? 'bg-white/30' : 'bg-white/10'}`}
-                  >
-                    {isOpen ? '−' : '+'}
+                  <span className={`ml-4 inline-flex h-7 w-7 items-center justify-center rounded-full ring-1 ring-white/20 ${isOpen ? "bg-white/30" : "bg-white/10"}`}>
+                    {isOpen ? "−" : "+"}
                   </span>
                 </button>
-                <div
-                  className={`grid transition-[grid-template-rows] duration-300 ease-out ${isOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}
-                >
+                <div className={`grid transition-[grid-template-rows] duration-300 ease-out ${isOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}`}>
                   <div className="overflow-hidden">
                     <p className="px-5 pb-5 text-white/85">{item.a}</p>
                   </div>
@@ -272,6 +300,66 @@ export default function LandingProduto(props: Props) {
         </div>
       </section>
       <Footer />
+    </div>
+  );
+}
+
+/** Componente Turnstile */
+function Turnstile({ onToken }: { onToken: (t: string) => void }) {
+  const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY as string | undefined;
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const widgetIdRef = useRef<TurnstileWidgetId | null>(null);
+
+  useEffect(() => {
+    if (!siteKey) return;
+
+    window.onTurnstileLoad = () => {
+      if (widgetIdRef.current || !containerRef.current || !window.turnstile) return;
+      widgetIdRef.current = window.turnstile.render(containerRef.current, {
+        sitekey: siteKey,
+        theme: "auto",
+        callback: (token: string) => onToken(token),
+        "error-callback": () => onToken(""),
+        "expired-callback": () => onToken(""),
+      });
+    };
+
+    const SCRIPT_ID = "cf-turnstile-script";
+    const existing = document.getElementById(SCRIPT_ID) as HTMLScriptElement | null;
+
+    if (!existing) {
+      const s = document.createElement("script");
+      s.id = SCRIPT_ID;
+      s.src = "https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onTurnstileLoad";
+      s.async = true;
+      s.defer = true;
+      document.head.appendChild(s);
+    } else if (window.turnstile && containerRef.current && !widgetIdRef.current) {
+      widgetIdRef.current = window.turnstile.render(containerRef.current, {
+        sitekey: siteKey,
+        theme: "auto",
+        callback: (token: string) => onToken(token),
+        "error-callback": () => onToken(""),
+        "expired-callback": () => onToken(""),
+      });
+    }
+
+    return () => {
+      if (window.turnstile && widgetIdRef.current) {
+        try {
+          window.turnstile.remove(widgetIdRef.current);
+        } catch {
+          /* ignore */
+        }
+        widgetIdRef.current = null;
+      }
+    };
+  }, [siteKey, onToken]);
+
+  return (
+    <div className="flex flex-col gap-2">
+      <div ref={containerRef} />
+      {!siteKey && <p className="text-xs text-rose-400">Erro: NEXT_PUBLIC_TURNSTILE_SITE_KEY ausente.</p>}
     </div>
   );
 }
