@@ -63,39 +63,6 @@ type Props = {
   onFormSubmit?: (data: { nome: string; email: string; telefone: string; mensagem: string }) => Promise<void> | void;
 };
 
-function SuccessConfirm({
-  onClose,
-  origin = "/LP",
-}: {
-  onClose: () => void;
-  origin?: string;
-}) {
-  return (
-    <div className="mt-3 rounded-2xl border border-emerald-400/30 bg-emerald-500/10 p-4">
-      <p className="text-sm text-emerald-300">
-        Recebido! Em breve entraremos em contato. ✅
-      </p>
-      <div className="mt-3 flex flex-wrap gap-3">
-        <a
-          href="/termos"
-          className="inline-flex items-center justify-center rounded-full bg-white/90 px-4 py-2 text-sm font-medium text-black hover:bg-white transition"
-        >
-          Ver Termos & Privacidade
-        </a>
-        <button
-          onClick={onClose}
-          className="inline-flex items-center justify-center rounded-full border border-white/20 px-4 py-2 text-sm text-white hover:bg-white/10 transition"
-        >
-          Li
-        </button>
-        <span className="text-xs text-white/50 self-center">
-          Origem: {origin}
-        </span>
-      </div>
-    </div>
-  );
-}
-
 export default function LandingProduto(props: Props) {
   const {
     titulo, subtitulo, descricao, bgHeader,
