@@ -1,3 +1,6 @@
+// O slug chama a foto de cover do post do blog, para adicionar uma foto, basta salvar a foto com o
+// Mesmo nome do slug do post dentro da pasta public/blog/covers.
+
 export type Section = {
   heading: string;
   paragraphs: string[];
