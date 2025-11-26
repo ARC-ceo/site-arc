@@ -350,4 +350,49 @@ export const posts: Post[] = [
     ],
     cta: { label: "Planejar próximos passos", href: "/Contato" },
   },
+  {
+  slug: "robo-a2-quebra-recorde-106km",
+  title: "Robô humanoide A2 quebra recorde mundial ao caminhar 106 km",
+  keyword: "robô A2 AgiBot recorde 106 km",
+  summary:
+    "Desenvolvido pela AgiBot, o robô humanoide A2 entrou para o Guinness World Records após caminhar 106 km de forma contínua em ambiente real.",
+  updatedAt: "2025-11-26",
+  sections: [
+    {
+      heading: "Introdução",
+      paragraphs: [
+        "O avanço da robótica ganha mais um marco histórico. O robô humanoide A2, desenvolvido pela empresa chinesa AgiBot, percorreu impressionantes 106,286 quilômetros em apenas três dias — uma façanha que garantiu seu lugar no Guinness World Records. A conquista, registrada e divulgada pela agência Xinhua e pelo China Daily, mostra como o setor de robôs bípedes está evoluindo rapidamente e abrindo portas para novas aplicações no mundo real."
+      ],
+    },
+    {
+      heading: "O feito histórico: 106 km de caminhada",
+      paragraphs: [
+        "O teste foi realizado em Shenzhen, uma das cidades tecnológicas mais avançadas da China. Diferente de demonstrações controladas em laboratórios, o A2 caminhou em ambientes externos, enfrentando obstáculos urbanos, mudanças de terreno e variações climáticas. Durante o percurso, o robô manteve estabilidade, equilíbrio e autonomia energética suficientes para completar o trajeto.",
+        "A distância total registrada — 106,286 km — representa atualmente o maior percurso contínuo já realizado por um robô humanoide bípedo. O Guinness validou o recorde, reforçando a importância do experimento para toda a indústria robótica."
+      ],
+    },
+    {
+      heading: "Tecnologia e capacidade do A2",
+      paragraphs: [
+        "O A2 foi projetado com ênfase em mobilidade e eficiência. Seu sistema de locomoção utiliza motores de alta precisão e sensores que permitem adaptação imediata ao ambiente. Além disso, conta com uma estrutura leve e equilibrada, tornando o movimento mais natural e estável.",
+        "Segundo a AgiBot, o modelo é capaz de executar tarefas que exigem coordenação avançada, incluindo levantar objetos, navegar por ambientes complexos e realizar operações repetitivas com segurança. Esse tipo de tecnologia abre caminho para uso em setores como logística, assistência, segurança e manufatura."
+      ],
+    },
+    {
+      heading: "Impacto para o futuro da robótica",
+      paragraphs: [
+        "O recorde alcançado pelo A2 representa mais do que um marco técnico: ele sinaliza que robôs humanoides estão cada vez mais próximos de operar lado a lado com humanos em ambientes reais. A caminhada prolongada demonstra autonomia, resistência e confiabilidade — três pilares essenciais para que robôs deixem o campo experimental e se tornem ferramentas práticas no dia a dia.",
+        "Especialistas consultados pela imprensa chinesa afirmam que esse avanço coloca a China em posição de destaque global no desenvolvimento de robôs bípedes, competindo com gigantes como Tesla Optimus, Figure 01 e Boston Dynamics."
+      ],
+    },
+    {
+      heading: "Conclusão",
+      paragraphs: [
+        "O sucesso do A2 reforça a velocidade com que a tecnologia robótica está evoluindo. Caminhar 106 km sem falhas em ambiente real não é apenas uma demonstração de força — é um indicador claro de que estamos entrando em uma nova era de robôs humanoides funcionais. O Grupo ARC acompanha de perto essas inovações e continua comprometido em trazer análises e insights sobre as tecnologias que moldam o futuro.",
+        "Fonte: Xinhua / China Daily"
+      ],
+    },
+  ],
+  cta: { label: "Conhecer mais tecnologias", href: "/Contato" },
+}
 ];
