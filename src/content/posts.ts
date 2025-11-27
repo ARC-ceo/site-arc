@@ -394,5 +394,65 @@ export const posts: Post[] = [
     },
   ],
   cta: { label: "Conhecer mais tecnologias", href: "/Contato" },
-}
+  },
+  {
+  slug: "hp-demite-6000-foca-em-ia-2028",
+  title: "HP anuncia corte de até 6.000 funcionários e acelera investimentos em IA até 2028",
+  keyword: "HP demissões 6000, HP IA 2028",
+  summary:
+    "A HP anunciou um plano de reestruturação que prevê o corte de até 6.000 funcionários até 2028, enquanto intensifica seus investimentos em Inteligência Artificial e otimização operacional.",
+
+  updatedAt: "2025-11-27",
+
+  sections: [
+    {
+      heading: "Introdução",
+      paragraphs: [
+        "A HP Inc. anunciou um amplo plano de reestruturação que prevê a demissão de 4.000 a 6.000 funcionários em todo o mundo até 2028. O movimento ocorre em meio à estratégia da empresa de reduzir custos, otimizar operações e acelerar a adoção de soluções baseadas em Inteligência Artificial."
+      ],
+    },
+
+    {
+      heading: "Resultados financeiros de 2025",
+      paragraphs: [
+        "A HP reportou receita anual de US$ 55,3 bilhões no ano fiscal de 2025, representando um aumento de 3,2% em relação ao ano anterior. Entretanto, o lucro por ação sofreu queda: o EPS GAAP caiu 5,7%, enquanto o EPS não-GAAP recuou 9%.",
+        "Segundo a empresa, o crescimento foi impulsionado principalmente pelo segmento de ‘Personal Systems’, com destaque para a crescente demanda por PCs com Inteligência Artificial."
+      ],
+    },
+
+    {
+      heading: "Corte de 6.000 funcionários até 2028",
+      paragraphs: [
+        "Como parte do plano de reestruturação, a HP pretende cortar entre 4.000 e 6.000 postos de trabalho globalmente até 2028. A medida visa reduzir custos e direcionar investimentos para tecnologias emergentes, especialmente IA.",
+        "O programa deve gerar uma economia aproximada de US$ 1 bilhão até 2028, com um custo de reestruturação estimado em US$ 650 milhões."
+      ],
+    },
+
+    {
+      heading: "Foco crescente em Inteligência Artificial",
+      paragraphs: [
+        "A HP reforçou que a Inteligência Artificial será o eixo central de sua estratégia de negócios para os próximos anos. A empresa deseja integrar IA a seus processos internos, otimizar operações, aprimorar segurança e acelerar o desenvolvimento de novos produtos.",
+        "A companhia também destacou o lançamento da plataforma HP Workforce Experience Platform (WXP), que utiliza IA para colaboração digital, análises avançadas, segurança e automação de tarefas corporativas."
+      ],
+    },
+
+    {
+      heading: "Impacto no mercado e posicionamento da HP",
+      paragraphs: [
+        "O anúncio coloca a HP entre as grandes empresas globais que estão reestruturando suas equipes para se adaptar à nova era dos ‘AI PCs’ e soluções inteligentes. Especialistas afirmam que a decisão reflete uma tendência crescente na indústria de tecnologia: reorganizar operações e priorizar investimentos em automação e IA.",
+        "Com a reestruturação, a HP espera fortalecer sua competitividade, melhorar margens e posicionar-se como uma das líderes globais no mercado de computação inteligente."
+      ],
+    },
+
+    {
+      heading: "Conclusão",
+      paragraphs: [
+        "A decisão da HP de reduzir seu quadro global enquanto intensifica investimentos em IA sinaliza uma mudança profunda na estratégia da empresa. À medida que o setor caminha para uma nova era marcada por automação, computadores inteligentes e modelos de trabalho híbridos, a HP pretende ocupar um papel central.",
+        "O impacto dessas mudanças será observado nos próximos anos, conforme a empresa equilibra inovação, eficiência e adaptação às demandas do mercado.",
+        "Fonte: Reuters, HP Newsroom, The Guardian"
+      ],
+    },
+  ],
+  cta: { label: "Acompanhar mais notícias", href: "/Contato" },
+  },
 ];
