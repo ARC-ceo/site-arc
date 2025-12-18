@@ -546,6 +546,6 @@ export const posts: Post[] = [
     }
   ],
   cta: { label: "Conhecer mais tecnologias", "href": "/Contato" }
-}
+},
 
 ];
