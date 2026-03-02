@@ -12,30 +12,11 @@ interface ProjetoSecundario {
   type: TipoProjeto;
 }
 
-/**
- * ProjetosSecundarios (ARC)
- * - Cards simples (grid) com estética glass alinhada ao site ARC
- * - Link externo para o projeto (target=_blank)
- * - Exclui SolarMetrics, ViaMobility e Conexão Anjo (já estão no carrossel principal)
- *
- * Ajuste de padronização:
- * - Título e descrição com clamp (linhas limitadas)
- * - Espaços mínimos fixos (min-h) para evitar “pular” layout quando quebra linha
- */
 const projetos: ProjetoSecundario[] = [
   {
     title: "Site Ávila Cred",
     description:
       "Redesign de site corporativo no segmento financeiro, priorizando autoridade, clareza e conversão.",
-    stack: "Next.js, React, TypeScript, Tailwind CSS",
-    role: "Front-end",
-    href: "https://www.avilacred.com.br",
-    type: "Site"
-  },
-  {
-    title: "Site GETIPI",
-    description:
-      "Página para a GETIPI, empresa especializada em Restituição de IPI.",
     stack: "Next.js, React, TypeScript, Tailwind CSS",
     role: "Front-end",
     href: "https://www.avilacred.com.br",
@@ -60,6 +41,22 @@ const projetos: ProjetoSecundario[] = [
     type: "Dashboard"
   }
 ];
+
+/**
+ * Clamp sem plugin e sem `any`:
+ * - usamos `CSSProperties` + index signature para propriedades webkit
+ */
+type ClampStyle = React.CSSProperties & {
+  WebkitLineClamp: number;
+  WebkitBoxOrient: "vertical";
+};
+
+const clamp = (lines: number): ClampStyle => ({
+  display: "-webkit-box",
+  WebkitBoxOrient: "vertical",
+  WebkitLineClamp: lines,
+  overflow: "hidden"
+});
 
 export default function ProjetosSecundarios() {
   return (
@@ -102,14 +99,6 @@ function CardProjeto({ item }: { item: ProjetoSecundario }) {
     App: "#00E0FF",
     Dashboard: "#7C3AED"
   };
-
-  // clamp helper (sem plugin)
-  const clamp = (lines: number): React.CSSProperties => ({
-    display: "-webkit-box",
-    WebkitBoxOrient: "vertical" as any,
-    WebkitLineClamp: lines,
-    overflow: "hidden"
-  });
 
   return (
     <article className="relative h-full">
@@ -156,7 +145,7 @@ function CardProjeto({ item }: { item: ProjetoSecundario }) {
               {item.title}
             </h3>
 
-            {/* ROLE: mantém 1 linha e altura fixa */}
+            {/* ROLE: 1 linha */}
             <p
               className="mt-1 text-xs text-white/60 min-h-[1rem]"
               style={clamp(1)}
@@ -183,7 +172,7 @@ function CardProjeto({ item }: { item: ProjetoSecundario }) {
           {item.description}
         </p>
 
-        {/* stack chips (fica consistente porque header/descrição não expandem mais) */}
+        {/* stack chips */}
         <div className="relative mb-6">
           <p className="text-[10px] uppercase tracking-[0.18em] text-white/50 mb-2">
             Stack
@@ -203,10 +192,9 @@ function CardProjeto({ item }: { item: ProjetoSecundario }) {
           </div>
         </div>
 
-        {/* empurra rodapé/CTA sempre pro fim */}
         <div className="flex-1" />
 
-        {/* footer / CTA sempre alinhado */}
+        {/* footer / CTA */}
         <div className="relative flex items-center justify-between gap-3 pt-4 border-t border-white/10">
           <span
             className="text-[10px] font-semibold text-white/55"
