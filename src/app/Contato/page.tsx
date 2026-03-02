@@ -1,29 +1,16 @@
+//src\app\Contato\page.tsx
 "use client";
 
 import Footer from "@/components/footer/page";
 import Nav from "@/components/nav/page";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useMemo, useState } from "react";
 
-/** Tipos mínimos da API do Turnstile para evitar `any` */
-type TurnstileWidgetId = string;
-type TurnstileTheme = "auto" | "light" | "dark";
-interface TurnstileRenderOptions {
-  sitekey: string;
-  theme?: TurnstileTheme;
-  callback?: (token: string) => void;
-  "error-callback"?: () => void;
-  "expired-callback"?: () => void;
-}
-interface TurnstileAPI {
-  render(container: HTMLElement, options: TurnstileRenderOptions): TurnstileWidgetId;
-  reset(id?: TurnstileWidgetId): void;
-  remove(id: TurnstileWidgetId): void;
-}
-declare global {
-  interface Window {
-    turnstile?: TurnstileAPI;
-    onTurnstileLoad?: () => void;
-  }
+const WHATSAPP_NUMBER = "5521983324011"; // +55 21 98332-4011
+const PREFILL =
+  "Olá! Gostaria de solicitar um orçamento/atendimento. Podemos conversar sobre meu projeto?";
+
+function buildWhatsappHref(message: string) {
+  return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
 }
 
 export default function ContactPage() {
@@ -31,42 +18,36 @@ export default function ContactPage() {
   const [loading, setLoading] = useState(false);
   const [agree, setAgree] = useState(false);
   const [submitted, setSubmitted] = useState<null | "ok" | "err">(null);
-  const [turnstileToken, setTurnstileToken] = useState("");
-  const startedAtRef = useRef<number>(Date.now());
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => setForm({ ...form, [e.target.name]: e.target.value });
+  const whatsappHref = useMemo(() => {
+    const parts = [
+      PREFILL,
+      "",
+      `Nome: ${form.name || "-"}`,
+      `Email: ${form.email || "-"}`,
+      "",
+      `Mensagem: ${form.message || "-"}`,
+    ];
+    return buildWhatsappHref(parts.join("\n"));
+  }, [form.name, form.email, form.message]);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+    setForm({ ...form, [e.target.name]: e.target.value });
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+
+    // Anti-bot simples
+    if (form.honeypot) return;
+    if (!agree) return;
+
     setLoading(true);
     setSubmitted(null);
 
     try {
-      const res = await fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: form.name,
-          email: form.email,
-          message: form.message,
-          honeypot: form.honeypot,
-          startedAt: startedAtRef.current,
-          turnstileToken,
-          agree,
-        }),
-      });
-      const data: { ok: boolean } = await res.json();
-      if (data.ok) {
-        setSubmitted("ok");
-        setForm({ name: "", email: "", message: "", honeypot: "" });
-        if (window.turnstile?.reset) window.turnstile.reset();
-        setTurnstileToken("");
-        startedAtRef.current = Date.now();
-      } else {
-        setSubmitted("err");
-      }
+      window.open(whatsappHref, "_blank", "noopener,noreferrer");
+      setSubmitted("ok");
+      setForm({ name: "", email: "", message: "", honeypot: "" });
     } catch {
       setSubmitted("err");
     } finally {
@@ -85,15 +66,83 @@ export default function ContactPage() {
             <span className="h-2 w-2 animate-pulse rounded-full bg-[#00C0FF]" />
             Fale com o Grupo ARC
           </span>
+
           <h1 className="mt-5 text-4xl font-bold tracking-tight text-white sm:text-5xl">
             Entre em contato
           </h1>
+
           <p className="mx-auto mt-4 max-w-2xl text-white/70">
-            Tem uma ideia, projeto ou dúvida? Envie uma mensagem e retornaremos em breve.
+            Atendimento mais rápido pelo WhatsApp. Clique no botão abaixo para abrir a conversa
+            com uma mensagem inicial já preenchida.
           </p>
         </section>
 
-        <section className="mt-12 grid grid-cols-1 gap-8 md:mt-16 md:grid-cols-5">
+        {/* CTA WhatsApp (baseado no padrão do rafaeldesanzio, adaptado para ARC) */}
+        <section className="mt-10">
+          <div className="relative">
+            {/* aura suave */}
+            <div
+              className="absolute -inset-1 rounded-[24px] blur-xl opacity-35"
+              style={{
+                background:
+                  "linear-gradient(135deg, rgba(0,192,255,0.18), rgba(0,0,90,0.16), rgba(0,224,255,0.14))",
+              }}
+            />
+
+            <div
+              className="
+                relative overflow-hidden
+                rounded-2xl
+                border border-white/12
+                bg-white/6 backdrop-blur-2xl
+                px-6 sm:px-10 py-10
+                text-center
+                shadow-[0_14px_45px_rgba(0,0,0,0.45)]
+              "
+            >
+              {/* sheen discreto */}
+              <div
+                className="absolute inset-0 opacity-[0.07]"
+                style={{
+                  backgroundImage:
+                    "linear-gradient(135deg, rgba(255,255,255,0.10), transparent 35%, rgba(255,255,255,0.05) 55%, transparent 75%)",
+                }}
+              />
+
+              <div className="relative">
+                <h2 className="text-xl sm:text-2xl font-semibold text-white">
+                  Atendimento mais rápido pelo WhatsApp
+                </h2>
+                <p className="mt-2 text-sm text-white/70 max-w-2xl mx-auto">
+                  Ideal para orçamento, prazos e alinhamento de escopo. Você pode também preencher o
+                  formulário abaixo — ao enviar, abriremos o WhatsApp com seus dados.
+                </p>
+
+                <a
+                  href={buildWhatsappHref(PREFILL)}
+                  target="_blank"
+                  rel="noreferrer"
+                  className={[
+                    "inline-flex items-center justify-center mt-6",
+                    "px-7 py-3 rounded-xl",
+                    "bg-[#00C0FF] text-black font-semibold",
+                    "border border-white/10",
+                    "shadow-[0_0_0px_rgba(0,0,0,0)]",
+                    "hover:shadow-[0_0_28px_rgba(0,192,255,0.45)]",
+                    "transition-all duration-200",
+                    "hover:scale-[1.04]",
+                  ].join(" ")}
+                >
+                  Falar no WhatsApp
+                </a>
+
+                <p className="mt-3 text-[11px] text-white/55">Número: +55 (21) 98332-4011</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="mt-12 grid grid-cols-1 gap-8 md:mt-14 md:grid-cols-5">
           <aside className="md:col-span-2">
             <InfoCard />
           </aside>
@@ -150,61 +199,55 @@ export default function ContactPage() {
                 />
               </div>
 
-              {/* Turnstile */}
-              <div className="mt-5">
-                <Turnstile onToken={setTurnstileToken} />
-                {!turnstileToken && (
-                  <p className="mt-2 text-xs text-white/60">
-                    Complete a verificação acima para habilitar o envio.
-                  </p>
-                )}
-              </div>
-
-              <div className="mt-6 flex items-center justify-between gap-4">
+              <div className="mt-6 flex flex-col gap-4">
                 {submitted === "ok" && (
-                  <div className="mt-3 rounded-2xl border border-emerald-400/30 bg-emerald-500/10 p-4">
+                  <div className="rounded-2xl border border-emerald-400/30 bg-emerald-500/10 p-4">
                     <p className="text-sm text-emerald-300">
-                      Mensagem enviada! Em breve entraremos em contato. ✅
+                      Abrimos o WhatsApp com sua mensagem. ✅
                     </p>
                   </div>
                 )}
 
                 {submitted === "err" && (
                   <p className="text-sm text-rose-400">
-                    Não foi possível enviar agora. Tente novamente em instantes.
+                    Não foi possível abrir o WhatsApp agora. Tente novamente.
                   </p>
                 )}
-                <div className="mt-4 flex items-start gap-3">
-                  <input
-                    id="agree"
-                    type="checkbox"
-                    checked={agree}
-                    onChange={(e) => setAgree(e.target.checked)}
-                    className="mt-1 h-4 w-4 rounded border-white/30 bg-black/20"
-                    required
-                  />
-                  <label htmlFor="agree" className="text-sm text-white/80">
-                    Li e concordo com os{" "}
-                    <a href="/termos" target="_blank" className="underline text-[#00C0FF]">
-                      Termos & Privacidade
-                    </a>
-                    .
-                  </label>
+
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                  <div className="flex items-start gap-3">
+                    <input
+                      id="agree"
+                      type="checkbox"
+                      checked={agree}
+                      onChange={(e) => setAgree(e.target.checked)}
+                      className="mt-1 h-4 w-4 rounded border-white/30 bg-black/20"
+                      required
+                    />
+                    <label htmlFor="agree" className="text-sm text-white/80">
+                      Li e concordo com os{" "}
+                      <a href="/termos" target="_blank" className="underline text-[#00C0FF]">
+                        Termos & Privacidade
+                      </a>
+                      .
+                    </label>
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={loading || !agree}
+                    className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#00C0FF] px-5 py-3 font-medium text-black transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-70"
+                  >
+                    {loading ? (
+                      <>
+                        <span className="h-4 w-4 animate-spin rounded-full border-2 border-black/40 border-t-black" />
+                        Abrindo WhatsApp…
+                      </>
+                    ) : (
+                      <>Enviar no WhatsApp</>
+                    )}
+                  </button>
                 </div>
-                <button
-                  type="submit"
-                  disabled={loading || !turnstileToken || !agree}
-                  className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#00C0FF] px-5 py-3 font-medium text-black transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-70"
-                >
-                  {loading ? (
-                    <>
-                      <span className="h-4 w-4 animate-spin rounded-full border-2 border-black/40 border-t-black" />
-                      Enviando…
-                    </>
-                  ) : (
-                    <>Enviar mensagem</>
-                  )}
-                </button>
               </div>
             </form>
           </div>
@@ -253,15 +296,14 @@ function Field({
 }
 
 function InfoCard() {
+  const whatsappHref = buildWhatsappHref(PREFILL);
+
   return (
     <div className="rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur">
       <h2 className="text-lg font-semibold text-white">Canais diretos</h2>
+
       <div className="mt-4 space-y-4 text-white/80">
-        <InfoRow
-          label="Email"
-          value="contato@grouparc.com.br"
-          href="mailto:contato@grouparc.com.br"
-        />
+        <InfoRow label="WhatsApp" value="+55 (21) 98332-4011" href={whatsappHref} />
         <InfoRow
           label="LinkedIn"
           value="/company/grupo-arc"
@@ -269,11 +311,11 @@ function InfoCard() {
         />
         <InfoRow label="Portfólio" value="site.grouparc.com.br" href="https://site.grouparc.com.br" />
       </div>
+
       <div className="mt-6 rounded-xl bg-gradient-to-br from-[#00C0FF]/20 to-transparent p-[1px]">
         <div className="rounded-xl bg-[#0C0F1A] p-4">
           <p className="text-sm text-white/70">
-            Preferimos contato por email. Sem WhatsApp por enquanto — respondemos rapidamente por
-            aqui. 💬
+            Atendimento prioritário via WhatsApp. Clique em “WhatsApp” acima para iniciar a conversa. 💬
           </p>
         </div>
       </div>
@@ -288,6 +330,7 @@ function InfoRow({ label, value, href }: { label: string; value: string; href?: 
       <span className="text-sm font-medium text-white">{value}</span>
     </div>
   );
+
   return href ? (
     <a href={href} target="_blank" rel="noreferrer" className="block transition hover:opacity-90">
       {content}
@@ -303,67 +346,6 @@ function BackgroundAura() {
       <div className="absolute inset-0 bg-gradient-to-b from-[#0C0F1A] via-[#0F1322] to-[#0C0F1A]" />
       <div className="absolute -top-32 -left-32 h-[36rem] w-[36rem] rounded-full bg-[#00C0FF]/15 blur-3xl" />
       <div className="absolute -bottom-40 right-[-10%] h-[40rem] w-[40rem] rounded-full bg-[#00C0FF]/10 blur-3xl" />
-    </div>
-  );
-}
-
-/** Turnstile robusto: render via API, sem `any` */
-function Turnstile({ onToken }: { onToken: (t: string) => void }) {
-  const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY as string | undefined;
-  const containerRef = useRef<HTMLDivElement | null>(null);
-  const widgetIdRef = useRef<TurnstileWidgetId | null>(null);
-
-  useEffect(() => {
-    if (!siteKey) return;
-
-    window.onTurnstileLoad = () => {
-      if (widgetIdRef.current || !containerRef.current || !window.turnstile) return;
-      widgetIdRef.current = window.turnstile.render(containerRef.current, {
-        sitekey: siteKey,
-        theme: "auto",
-        callback: (token: string) => onToken(token),
-        "error-callback": () => onToken(""),
-        "expired-callback": () => onToken(""),
-      });
-    };
-
-    const SCRIPT_ID = "cf-turnstile-script";
-    const existing = document.getElementById(SCRIPT_ID) as HTMLScriptElement | null;
-
-    if (!existing) {
-      const s = document.createElement("script");
-      s.id = SCRIPT_ID;
-      s.src = "https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onTurnstileLoad";
-      s.async = true;
-      s.defer = true;
-      document.head.appendChild(s);
-    } else if (window.turnstile && containerRef.current && !widgetIdRef.current) {
-      // script já carregado (hot reload)
-      widgetIdRef.current = window.turnstile.render(containerRef.current, {
-        sitekey: siteKey,
-        theme: "auto",
-        callback: (token: string) => onToken(token),
-        "error-callback": () => onToken(""),
-        "expired-callback": () => onToken(""),
-      });
-    }
-
-    return () => {
-      if (window.turnstile && widgetIdRef.current) {
-        try {
-          window.turnstile.remove(widgetIdRef.current);
-        } catch {
-          // ignore
-        }
-        widgetIdRef.current = null;
-      }
-    };
-  }, [siteKey, onToken]);
-
-  return (
-    <div className="flex flex-col gap-2">
-      <div ref={containerRef} />
-      {!siteKey && <p className="text-xs text-rose-400">Erro: NEXT_PUBLIC_TURNSTILE_SITE_KEY ausente.</p>}
     </div>
   );
 }
