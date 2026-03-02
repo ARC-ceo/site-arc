@@ -1,6 +1,8 @@
+//src\app\Projetos\page.tsx
 import CarrosselProjetos from "@/components/carrosselProjetos/page";
 import Footer from "@/components/footer/page";
 import Nav from "@/components/nav/page";
+import ProjetosSecundarios from "@/components/projetosSecundarios/page";
 
 function Separator() {
   return (
@@ -38,6 +40,10 @@ export default function ProjectsSection() {
 
       <section className="px-2 sm:px-4 md:px-8">
         <CarrosselProjetos />
+      </section>
+
+      <section>
+        <ProjetosSecundarios />
       </section>
 
       <Separator />

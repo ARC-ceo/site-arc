@@ -1,3 +1,4 @@
+//src\components\carrosselProjetos\page.tsx
 'use client';
 
 import { useState } from "react";
@@ -17,6 +18,8 @@ const projetos = [
     tags: ["Energia Sustentável", "Dados em Tempo Real", "Experiência do Usuário"],
     imagem: "/metricsbanner.png",
     link: "/SolarMetrics",
+    siteUrl: "https://solarmetrics.grouparc.com.br",
+    status: "active" as const,
   },
   {
     id: 2,
@@ -29,6 +32,8 @@ const projetos = [
     tags: ["Mobilidade Urbana", "Dados em Tempo Real", "Experiência do Usuário"],
     imagem: "/viamob.png",
     link: "/ViaMobility",
+    siteUrl: "https://viamobility.grouparc.com.br",
+    status: "active" as const,
   },
   {
     id: 3,
@@ -41,6 +46,7 @@ const projetos = [
     tags: ["Doações", "Emergências", "Dados em Tempo Real", "Experiência do Usuário"],
     imagem: "/anjobanner.png",
     link: "/ConexaoAnjo",
+    status: "soon" as const,
   },
 ];
 
@@ -56,6 +62,7 @@ export default function CarrosselProjetos() {
       <div className="flex flex-col sm:flex-row items-center justify-center gap-4 md:gap-6 transition-all duration-300">
         {projetos.map((projeto, index) => {
           const isActive = index === current;
+          const isSoon = projeto.status === "soon";
 
           return (
             <article
@@ -80,16 +87,26 @@ export default function CarrosselProjetos() {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
                   <div className="absolute inset-0 p-4 text-center text-white flex flex-col items-center justify-end">
-                    <h4 className="text-xs sm:text-sm font-bold tracking-wide">{projeto.tituloImagem}</h4>
-                    <p className="text-[10px] sm:text-xs opacity-90">{projeto.subtituloImagem}</p>
+                    <h4 className="text-xs sm:text-sm font-bold tracking-wide">
+                      {projeto.tituloImagem}
+                    </h4>
+                    <p className="text-[10px] sm:text-xs opacity-90">
+                      {projeto.subtituloImagem}
+                    </p>
                   </div>
                 </div>
 
                 {/* Conteúdo */}
                 <div className="flex flex-1 flex-col p-4">
-                  <h3 className="mb-1 py-2 text-sm sm:text-base font-bold text-white">{projeto.titulo}</h3>
-                  <h4 className="mb-3 py-2 text-xs sm:text-sm text-white/70">{projeto.subtitulo}</h4>
-                  <p className="mb-4 py-2 text-xs sm:text-sm text-white/85">{projeto.texto}</p>
+                  <h3 className="mb-1 py-2 text-sm sm:text-base font-bold text-white">
+                    {projeto.titulo}
+                  </h3>
+                  <h4 className="mb-3 py-2 text-xs sm:text-sm text-white/70">
+                    {projeto.subtitulo}
+                  </h4>
+                  <p className="mb-4 py-2 text-xs sm:text-sm text-white/85">
+                    {projeto.texto}
+                  </p>
 
                   <div className="mb-4 flex flex-wrap gap-2">
                     {projeto.tags.map((tag, i) => (
@@ -102,17 +119,67 @@ export default function CarrosselProjetos() {
                     ))}
                   </div>
 
+                  {/* Ações */}
                   <div className="mt-auto border-t border-white/10 pt-4">
-                    {projeto.link ? (
-                      <Link
-                        href={projeto.link}
-                        className="text-xs sm:text-sm font-bold text-white hover:text-[#00E0FF]"
-                      >
-                        Saiba mais →
-                      </Link>
-                    ) : (
-                      <span className="text-xs sm:text-sm text-white/50">Em breve</span>
-                    )}
+                    <div className="flex items-center justify-between gap-3">
+                      {/* Saiba mais (interno) */}
+                      {projeto.link ? (
+                        <Link
+                          href={projeto.link}
+                          className={clsx(
+                            "text-xs sm:text-sm font-bold",
+                            isSoon
+                              ? "text-white/50 pointer-events-none"
+                              : "text-white hover:text-[#00E0FF]"
+                          )}
+                          aria-disabled={isSoon}
+                          tabIndex={isSoon ? -1 : 0}
+                        >
+                          Saiba mais →
+                        </Link>
+                      ) : (
+                        <span className="text-xs sm:text-sm text-white/50">Em breve</span>
+                      )}
+
+                      {/* Botão do site (externo) */}
+                      {projeto.siteUrl ? (
+                        <Link
+                          href={projeto.siteUrl}
+                          target="_blank"
+                          rel="noreferrer"
+                          className={[
+                            "inline-flex items-center justify-center",
+                            "rounded-md px-3 py-2",
+                            "text-[11px] sm:text-xs font-bold",
+                            "border ring-1 backdrop-blur",
+                            "transition-all duration-200",
+                            "border-white/15 ring-white/10",
+                            "bg-white/10 text-white",
+                            "hover:bg-white/15 hover:border-white/25 hover:text-[#00E0FF]"
+                          ].join(" ")}
+                          aria-label={`Abrir site ${projeto.titulo}`}
+                        >
+                          Visitar site ↗
+                        </Link>
+                      ) : (
+                        <button
+                          type="button"
+                          className={[
+                            "inline-flex items-center justify-center",
+                            "rounded-md px-3 py-2",
+                            "text-[11px] sm:text-xs font-bold",
+                            "border ring-1 backdrop-blur",
+                            "border-white/10 ring-white/5",
+                            "bg-white/5 text-white/45",
+                            "cursor-not-allowed"
+                          ].join(" ")}
+                          disabled
+                          aria-disabled="true"
+                        >
+                          Em breve
+                        </button>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
